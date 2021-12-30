@@ -3,7 +3,7 @@ package adb
 import (
 	"testing"
 
-	"github.com/hemeda3/goadb/internal/errors"
+	"github.com/hemeda3/goadb/public/errors"
 	"github.com/hemeda3/goadb/wire"
 	"github.com/stretchr/testify/assert"
 )
@@ -64,26 +64,26 @@ func TestCalculateStateDiffsUnchangedNonEmpty(t *testing.T) {
 func TestCalculateStateDiffsOneAdded(t *testing.T) {
 	oldStates := map[string]DeviceState{}
 	newStates := map[string]DeviceState{
-		"serial": StateOffline,
+		"Serial": StateOffline,
 	}
 
 	diffs := calculateStateDiffs(oldStates, newStates)
 
 	assertContainsOnly(t, []DeviceStateChangedEvent{
-		DeviceStateChangedEvent{"serial", StateDisconnected, StateOffline},
+		DeviceStateChangedEvent{"Serial", StateDisconnected, StateOffline},
 	}, diffs)
 }
 
 func TestCalculateStateDiffsOneRemoved(t *testing.T) {
 	oldStates := map[string]DeviceState{
-		"serial": StateOffline,
+		"Serial": StateOffline,
 	}
 	newStates := map[string]DeviceState{}
 
 	diffs := calculateStateDiffs(oldStates, newStates)
 
 	assertContainsOnly(t, []DeviceStateChangedEvent{
-		DeviceStateChangedEvent{"serial", StateOffline, StateDisconnected},
+		DeviceStateChangedEvent{"Serial", StateOffline, StateDisconnected},
 	}, diffs)
 }
 

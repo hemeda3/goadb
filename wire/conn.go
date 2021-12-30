@@ -1,6 +1,6 @@
 package wire
 
-import "github.com/hemeda3/goadb/internal/errors"
+import "github.com/hemeda3/goadb/public/errors"
 
 const (
 	// The official implementation of adb imposes an undocumented 255-byte limit

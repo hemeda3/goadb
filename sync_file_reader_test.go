@@ -88,7 +88,7 @@ func TestReadError(t *testing.T) {
 	s := wire.NewSyncScanner(strings.NewReader(
 		"FAIL\004\000\000\000fail"))
 	_, err := newSyncFileReader(s)
-	assert.EqualError(t, err, "AdbError: server error for read-chunk request: fail ({Request:read-chunk ServerMsg:fail})")
+	assert.EqualError(t, err, "AdbError: Server error for read-chunk request: fail ({Request:read-chunk ServerMsg:fail})")
 }
 
 func TestReadEmpty(t *testing.T) {

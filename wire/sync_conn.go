@@ -1,6 +1,6 @@
 package wire
 
-import "github.com/hemeda3/goadb/internal/errors"
+import "github.com/hemeda3/goadb/public/errors"
 
 const (
 	// Chunks cannot be longer than 64k.

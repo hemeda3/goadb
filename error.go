@@ -1,21 +1,21 @@
 package adb
 
-import "github.com/hemeda3/goadb/internal/errors"
+import "github.com/hemeda3/goadb/public/errors"
 
 type ErrCode errors.ErrCode
 
 const (
 	AssertionError = ErrCode(errors.AssertionError)
 	ParseError     = ErrCode(errors.ParseError)
-	// The server was not available on the requested port.
+	// The Server was not available on the requested port.
 	ServerNotAvailable = ErrCode(errors.ServerNotAvailable)
-	// General network error communicating with the server.
+	// General network error communicating with the Server.
 	NetworkError = ErrCode(errors.NetworkError)
-	// The connection to the server was reset in the middle of an operation. Server probably died.
+	// The connection to the Server was reset in the middle of an operation. Server probably died.
 	ConnectionResetError = ErrCode(errors.ConnectionResetError)
-	// The server returned an error message, but we couldn't parse it.
+	// The Server returned an error message, but we couldn't parse it.
 	AdbError = ErrCode(errors.AdbError)
-	// The server returned a "device not found" error.
+	// The Server returned a "device not found" error.
 	DeviceNotFound = ErrCode(errors.DeviceNotFound)
 	// Tried to perform an operation on a path that doesn't exist on the device.
 	FileNoExistError = ErrCode(errors.FileNoExistError)

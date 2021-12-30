@@ -3,7 +3,7 @@ package adb
 import (
 	"testing"
 
-	"github.com/hemeda3/goadb/internal/errors"
+	"github.com/hemeda3/goadb/public/errors"
 	"github.com/hemeda3/goadb/wire"
 	"github.com/stretchr/testify/assert"
 )
@@ -13,10 +13,10 @@ func TestGetAttribute(t *testing.T) {
 		Status:   wire.StatusSuccess,
 		Messages: []string{"value"},
 	}
-	client := (&Adb{s}).Device(DeviceWithSerial("serial"))
+	client := (&Adb{s}).Device(DeviceWithSerial("Serial"))
 
 	v, err := client.getAttribute("attr")
-	assert.Equal(t, "host-serial:serial:attr", s.Requests[0])
+	assert.Equal(t, "host-Serial:Serial:attr", s.Requests[0])
 	assert.NoError(t, err)
 	assert.Equal(t, "value", v)
 }
@@ -45,11 +45,11 @@ func TestGetDeviceInfo(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Equal(t, "Bar", device.Product)
 
-	client = newDeviceClientWithDeviceLister("serial", deviceLister)
+	client = newDeviceClientWithDeviceLister("Serial", deviceLister)
 	device, err = client.DeviceInfo()
 	assert.True(t, HasErrCode(err, DeviceNotFound))
 	assert.EqualError(t, err.(*errors.Err).Cause,
-		"DeviceNotFound: device list doesn't contain serial serial")
+		"DeviceNotFound: device list doesn't contain Serial Serial")
 	assert.Nil(t, device)
 }
 

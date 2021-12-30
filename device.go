@@ -7,7 +7,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/hemeda3/goadb/internal/errors"
+	"github.com/hemeda3/goadb/public/errors"
 	"github.com/hemeda3/goadb/wire"
 )
 
@@ -18,18 +18,18 @@ var MtimeOfClose = time.Time{}
 // Device communicates with a specific Android device.
 // To get an instance, call Device() on an Adb.
 type Device struct {
-	server     server
-	descriptor DeviceDescriptor
+	Server     server
+	Descriptor DeviceDescriptor
 
 	// Used to get device info.
 	deviceListFunc func() ([]*DeviceInfo, error)
 }
 
 func (c *Device) String() string {
-	return c.descriptor.String()
+	return c.Descriptor.String()
 }
 
-// get-product is documented, but not implemented, in the server.
+// get-product is documented, but not implemented, in the Server.
 // TODO(z): Make product exported if get-product is ever implemented in adb.
 func (c *Device) product() (string, error) {
 	attr, err := c.getAttribute("get-product")
@@ -78,7 +78,7 @@ func (c *Device) DeviceInfo() (*DeviceInfo, error) {
 		}
 	}
 
-	err = errors.Errorf(errors.DeviceNotFound, "device list doesn't contain serial %s", serial)
+	err = errors.Errorf(errors.DeviceNotFound, "device list doesn't contain Serial %s", serial)
 	return nil, wrapClientError(err, c, "DeviceInfo")
 }
 
@@ -191,11 +191,11 @@ func (c *Device) OpenWrite(path string, perms os.FileMode, mtime time.Time) (io.
 	return writer, wrapClientError(err, c, "OpenWrite(%s)", path)
 }
 
-// getAttribute returns the first message returned by the server by running
+// getAttribute returns the first message returned by the Server by running
 // <host-prefix>:<attr>, where host-prefix is determined from the DeviceDescriptor.
 func (c *Device) getAttribute(attr string) (string, error) {
-	resp, err := roundTripSingleResponse(c.server,
-		fmt.Sprintf("%s:%s", c.descriptor.getHostPrefix(), attr))
+	resp, err := roundTripSingleResponse(c.Server,
+		fmt.Sprintf("%s:%s", c.Descriptor.getHostPrefix(), attr))
 	if err != nil {
 		return "", err
 	}
@@ -222,15 +222,15 @@ func (c *Device) getSyncConn() (*wire.SyncConn, error) {
 // dialDevice switches the connection to communicate directly with the device
 // by requesting the transport defined by the DeviceDescriptor.
 func (c *Device) dialDevice() (*wire.Conn, error) {
-	conn, err := c.server.Dial()
+	conn, err := c.Server.Dial()
 	if err != nil {
 		return nil, err
 	}
 
-	req := fmt.Sprintf("host:%s", c.descriptor.getTransportDescriptor())
+	req := fmt.Sprintf("host:%s", c.Descriptor.getTransportDescriptor())
 	if err = wire.SendMessageString(conn, req); err != nil {
 		conn.Close()
-		return nil, errors.WrapErrf(err, "error connecting to device '%s'", c.descriptor)
+		return nil, errors.WrapErrf(err, "error connecting to device '%s'", c.Descriptor)
 	}
 
 	if _, err = conn.ReadStatus(req); err != nil {

@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/hemeda3/goadb/internal/errors"
+	"github.com/hemeda3/goadb/public/errors"
 	"github.com/stretchr/testify/assert"
 )
 

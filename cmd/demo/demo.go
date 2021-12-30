@@ -9,7 +9,7 @@ import (
 	"time"
 
 	adb "github.com/hemeda3/goadb"
-	"github.com/hemeda3/goadb/internal/errors"
+	"github.com/hemeda3/goadb/public/errors"
 )
 
 var (

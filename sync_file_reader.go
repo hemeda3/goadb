@@ -3,7 +3,7 @@ package adb
 import (
 	"io"
 
-	"github.com/hemeda3/goadb/internal/errors"
+	"github.com/hemeda3/goadb/public/errors"
 	"github.com/hemeda3/goadb/wire"
 )
 
@@ -101,7 +101,7 @@ func readNextChunk(r wire.SyncScanner) (io.Reader, error) {
 	}
 }
 
-// readFileNotFoundPredicate returns true if s is the adb server error message returned
+// readFileNotFoundPredicate returns true if s is the adb Server error message returned
 // when trying to open a file that doesn't exist.
 func readFileNotFoundPredicate(s string) bool {
 	return s == "No such file or directory"

@@ -7,14 +7,14 @@ import (
 	"os/exec"
 	"strings"
 
-	"github.com/hemeda3/goadb/internal/errors"
+	"github.com/hemeda3/goadb/public/errors"
 	"github.com/hemeda3/goadb/wire"
 )
 
 const (
 	AdbExecutableName = "adb"
 
-	// Default port the adb server listens on.
+	// Default port the adb Server listens on.
 	AdbPort = 5037
 )
 
@@ -22,18 +22,18 @@ type ServerConfig struct {
 	// Path to the adb executable. If empty, the PATH environment variable will be searched.
 	PathToAdb string
 
-	// Host and port the adb server is listening on.
+	// Host and port the adb Server is listening on.
 	// If not specified, will use the default port on localhost.
 	Host string
 	Port int
 
-	// Dialer used to connect to the adb server.
+	// Dialer used to connect to the adb Server.
 	Dialer
 
 	fs *filesystem
 }
 
-// Server knows how to start the adb server and connect to it.
+// Server knows how to start the adb Server and connect to it.
 type server interface {
 	Start() error
 	Dial() (*wire.Conn, error)
@@ -89,14 +89,14 @@ func newServer(config ServerConfig) (server, error) {
 	}, nil
 }
 
-// Dial tries to connect to the server. If the first attempt fails, tries starting the server before
+// Dial tries to connect to the Server. If the first attempt fails, tries starting the Server before
 // retrying. If the second attempt fails, returns the error.
 func (s *realServer) Dial() (*wire.Conn, error) {
 	conn, err := s.config.Dial(s.address)
 	if err != nil {
-		// Attempt to start the server and try again.
+		// Attempt to start the Server and try again.
 		if err = s.Start(); err != nil {
-			return nil, errors.WrapErrorf(err, errors.ServerNotAvailable, "error starting server for dial")
+			return nil, errors.WrapErrorf(err, errors.ServerNotAvailable, "error starting Server for dial")
 		}
 
 		conn, err = s.config.Dial(s.address)
@@ -107,11 +107,11 @@ func (s *realServer) Dial() (*wire.Conn, error) {
 	return conn, nil
 }
 
-// StartServer ensures there is a server running.
+// StartServer ensures there is a Server running.
 func (s *realServer) Start() error {
-	output, err := s.config.fs.CmdCombinedOutput(s.config.PathToAdb, "-L", fmt.Sprintf("tcp:%s", s.address), "start-server")
+	output, err := s.config.fs.CmdCombinedOutput(s.config.PathToAdb, "-L", fmt.Sprintf("tcp:%s", s.address), "start-Server")
 	outputStr := strings.TrimSpace(string(output))
-	return errors.WrapErrorf(err, errors.ServerNotAvailable, "error starting server: %s\noutput:\n%s", err, outputStr)
+	return errors.WrapErrorf(err, errors.ServerNotAvailable, "error starting Server: %s\noutput:\n%s", err, outputStr)
 }
 
 // filesystem abstracts interactions with the local filesystem for testability.

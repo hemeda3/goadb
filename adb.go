@@ -4,12 +4,12 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/hemeda3/goadb/internal/errors"
+	"github.com/hemeda3/goadb/public/errors"
 	"github.com/hemeda3/goadb/wire"
 )
 
 /*
-Adb communicates with host services on the adb server.
+Adb communicates with host services on the adb Server.
 
 Eg.
 	client := adb.New()
@@ -35,20 +35,20 @@ func NewWithConfig(config ServerConfig) (*Adb, error) {
 	return &Adb{server}, nil
 }
 
-// Dial establishes a connection with the adb server.
+// Dial establishes a connection with the adb Server.
 func (c *Adb) Dial() (*wire.Conn, error) {
 	return c.server.Dial()
 }
 
-// Starts the adb server if it’s not running.
+// Starts the adb Server if it’s not running.
 func (c *Adb) StartServer() error {
 	return c.server.Start()
 }
 
 func (c *Adb) Device(descriptor DeviceDescriptor) *Device {
 	return &Device{
-		server:         c.server,
-		descriptor:     descriptor,
+		Server:         c.server,
+		Descriptor:     descriptor,
 		deviceListFunc: c.ListDevices,
 	}
 }
@@ -57,7 +57,7 @@ func (c *Adb) NewDeviceWatcher() *DeviceWatcher {
 	return newDeviceWatcher(c.server)
 }
 
-// ServerVersion asks the ADB server for its internal version number.
+// ServerVersion asks the ADB Server for its public version number.
 func (c *Adb) ServerVersion() (int, error) {
 	resp, err := roundTripSingleResponse(c.server, "host:version")
 	if err != nil {
@@ -72,10 +72,10 @@ func (c *Adb) ServerVersion() (int, error) {
 }
 
 /*
-KillServer tells the server to quit immediately.
+KillServer tells the Server to quit immediately.
 
 Corresponds to the command:
-	adb kill-server
+	adb kill-Server
 */
 func (c *Adb) KillServer() error {
 	conn, err := c.server.Dial()
@@ -92,7 +92,7 @@ func (c *Adb) KillServer() error {
 }
 
 /*
-ListDeviceSerials returns the serial numbers of all attached devices.
+ListDeviceSerials returns the Serial numbers of all attached devices.
 
 Corresponds to the command:
 	adb devices
@@ -153,7 +153,7 @@ func (c *Adb) parseServerVersion(versionRaw []byte) (int, error) {
 	version, err := strconv.ParseInt(versionStr, 16, 32)
 	if err != nil {
 		return 0, errors.WrapErrorf(err, errors.ParseError,
-			"error parsing server version: %s", versionStr)
+			"error parsing Server version: %s", versionStr)
 	}
 	return int(version), nil
 }

@@ -4,7 +4,7 @@ import (
 	"io"
 	"strings"
 
-	"github.com/hemeda3/goadb/internal/errors"
+	"github.com/hemeda3/goadb/public/errors"
 	"github.com/hemeda3/goadb/wire"
 )
 

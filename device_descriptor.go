@@ -8,7 +8,7 @@ type deviceDescriptorType int
 const (
 	// host:transport-any and host:<request>
 	DeviceAny deviceDescriptorType = iota
-	// host:transport:<serial> and host-serial:<serial>:<request>
+	// host:transport:<Serial> and host-Serial:<Serial>:<request>
 	DeviceSerial
 	// host:transport-usb and host-usb:<request>
 	DeviceUsb
@@ -17,40 +17,40 @@ const (
 )
 
 type DeviceDescriptor struct {
-	descriptorType deviceDescriptorType
+	DescriptorType deviceDescriptorType
 
 	// Only used if Type is DeviceSerial.
-	serial string
+	Serial string
 }
 
 func AnyDevice() DeviceDescriptor {
-	return DeviceDescriptor{descriptorType: DeviceAny}
+	return DeviceDescriptor{DescriptorType: DeviceAny}
 }
 
 func AnyUsbDevice() DeviceDescriptor {
-	return DeviceDescriptor{descriptorType: DeviceUsb}
+	return DeviceDescriptor{DescriptorType: DeviceUsb}
 }
 
 func AnyLocalDevice() DeviceDescriptor {
-	return DeviceDescriptor{descriptorType: DeviceLocal}
+	return DeviceDescriptor{DescriptorType: DeviceLocal}
 }
 
 func DeviceWithSerial(serial string) DeviceDescriptor {
 	return DeviceDescriptor{
-		descriptorType: DeviceSerial,
-		serial:         serial,
+		DescriptorType: DeviceSerial,
+		Serial:         serial,
 	}
 }
 
 func (d DeviceDescriptor) String() string {
-	if d.descriptorType == DeviceSerial {
-		return fmt.Sprintf("%s[%s]", d.descriptorType, d.serial)
+	if d.DescriptorType == DeviceSerial {
+		return fmt.Sprintf("%s[%s]", d.DescriptorType, d.Serial)
 	}
-	return d.descriptorType.String()
+	return d.DescriptorType.String()
 }
 
 func (d DeviceDescriptor) getHostPrefix() string {
-	switch d.descriptorType {
+	switch d.DescriptorType {
 	case DeviceAny:
 		return "host"
 	case DeviceUsb:
@@ -58,14 +58,14 @@ func (d DeviceDescriptor) getHostPrefix() string {
 	case DeviceLocal:
 		return "host-local"
 	case DeviceSerial:
-		return fmt.Sprintf("host-serial:%s", d.serial)
+		return fmt.Sprintf("host-Serial:%s", d.Serial)
 	default:
-		panic(fmt.Sprintf("invalid DeviceDescriptorType: %v", d.descriptorType))
+		panic(fmt.Sprintf("invalid DeviceDescriptorType: %v", d.DescriptorType))
 	}
 }
 
 func (d DeviceDescriptor) getTransportDescriptor() string {
-	switch d.descriptorType {
+	switch d.DescriptorType {
 	case DeviceAny:
 		return "transport-any"
 	case DeviceUsb:
@@ -73,8 +73,8 @@ func (d DeviceDescriptor) getTransportDescriptor() string {
 	case DeviceLocal:
 		return "transport-local"
 	case DeviceSerial:
-		return fmt.Sprintf("transport:%s", d.serial)
+		return fmt.Sprintf("transport:%s", d.Serial)
 	default:
-		panic(fmt.Sprintf("invalid DeviceDescriptorType: %v", d.descriptorType))
+		panic(fmt.Sprintf("invalid DeviceDescriptorType: %v", d.DescriptorType))
 	}
 }

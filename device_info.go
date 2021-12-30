@@ -4,7 +4,7 @@ import (
 	"bufio"
 	"strings"
 
-	"github.com/hemeda3/goadb/internal/errors"
+	"github.com/hemeda3/goadb/public/errors"
 )
 
 type DeviceInfo struct {
@@ -27,7 +27,7 @@ func (d *DeviceInfo) IsUsb() bool {
 
 func newDevice(serial string, attrs map[string]string) (*DeviceInfo, error) {
 	if serial == "" {
-		return nil, errors.AssertionErrorf("device serial cannot be blank")
+		return nil, errors.AssertionErrorf("device Serial cannot be blank")
 	}
 
 	return &DeviceInfo{

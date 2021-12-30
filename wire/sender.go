@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/hemeda3/goadb/internal/errors"
+	"github.com/hemeda3/goadb/public/errors"
 )
 
 // Sender sends messages to the server.

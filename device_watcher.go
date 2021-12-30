@@ -8,13 +8,13 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/hemeda3/goadb/internal/errors"
+	"github.com/hemeda3/goadb/public/errors"
 	"github.com/hemeda3/goadb/wire"
 )
 
 /*
 DeviceWatcher publishes device status change events.
-If the server dies while listening for events, it restarts the server.
+If the Server dies while listening for events, it restarts the Server.
 */
 type DeviceWatcher struct {
 	*deviceWatcherImpl
@@ -97,7 +97,7 @@ Returns when scanner returns an error.
 Doesn't refer directly to a *DeviceWatcher so it can be GCed (which will,
 in turn, close Scanner and stop this goroutine).
 
-TODO: to support shutdown, spawn a new goroutine each time a server connection is established.
+TODO: to support shutdown, spawn a new goroutine each time a Server connection is established.
 This goroutine should read messages and send them to a message channel. Can write errors directly
 to errVal. publishDevicesUntilError should take the msg chan and the scanner and select on the msg chan and stop chan, and if the stop
 chan sends, close the scanner and return true. If the msg chan closes, just return false.
@@ -125,19 +125,19 @@ func publishDevices(watcher *deviceWatcherImpl) {
 		}
 
 		if HasErrCode(err, ConnectionResetError) {
-			// The server died, restart and reconnect.
+			// The Server died, restart and reconnect.
 
 			// Delay by a random [0ms, 500ms) in case multiple DeviceWatchers are trying to
-			// start the same server.
+			// start the same Server.
 			delay := time.Duration(rand.Intn(500)) * time.Millisecond
 
-			log.Printf("[DeviceWatcher] server died, restarting in %s…", delay)
+			log.Printf("[DeviceWatcher] Server died, restarting in %s…", delay)
 			time.Sleep(delay)
 			if err := watcher.server.Start(); err != nil {
-				log.Println("[DeviceWatcher] error restarting server, giving up")
+				log.Println("[DeviceWatcher] error restarting Server, giving up")
 				watcher.reportErr(err)
 				return
-			} // Else server should be running, continue listening.
+			} // Else Server should be running, continue listening.
 		} else {
 			// Unknown error, don't retry.
 			watcher.reportErr(err)

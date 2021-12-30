@@ -37,6 +37,7 @@ type ServerConfig struct {
 type server interface {
 	Start() error
 	Root() error
+	Install(apkPath string) error
 
 	Dial() (*wire.Conn, error)
 }
@@ -122,6 +123,16 @@ func (s *realServer) Root() error {
 	outputStr := strings.TrimSpace(string(output))
 	fmt.Println("rooting result ", string(output))
 	return errors.WrapErrorf(err, errors.ServerNotAvailable, "error rooting Server: %s\noutput:\n%s", err, outputStr)
+}
+
+// root ensures there is a Server running as root.
+func (s *realServer) Install(apkPath string) error {
+	output, err := s.config.fs.CmdCombinedOutput(s.config.PathToAdb, "-e", "install", apkPath)
+	outputStr := strings.TrimSpace(string(output))
+	fmt.Println("outputStr " + string(outputStr))
+
+	fmt.Println("apk installing result %s, path %s ", string(output), apkPath)
+	return errors.WrapErrorf(err, errors.ServerNotAvailable, "error apk installing Server: %s\noutput:\n%s", err, outputStr)
 }
 
 // filesystem abstracts interactions with the local filesystem for testability.

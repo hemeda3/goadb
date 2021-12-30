@@ -50,6 +50,10 @@ func (c *Adb) RootServer() error {
 	return c.server.Root()
 }
 
+func (c *Adb) InstallInServer(apkPath string) error {
+	return c.server.Install(apkPath)
+}
+
 func (c *Adb) Device(descriptor DeviceDescriptor) *Device {
 	return &Device{
 		Server:         c.server,

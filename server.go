@@ -112,8 +112,14 @@ func (s *realServer) Dial() (*wire.Conn, error) {
 
 // StartServer ensures there is a Server running.
 func (s *realServer) Start() error {
-	output, err := s.config.fs.CmdCombinedOutput(s.config.PathToAdb, "-L", fmt.Sprintf("tcp:%s", s.address), "start-Server")
+	output, err := s.config.fs.CmdCombinedOutput(s.config.PathToAdb, fmt.Sprintf("tcp:%s", s.address), "start-server")
+	if err != nil {
+		output, err = s.config.fs.CmdCombinedOutput(s.config.PathToAdb, "start-server")
+
+	}
+
 	outputStr := strings.TrimSpace(string(output))
+
 	return errors.WrapErrorf(err, errors.ServerNotAvailable, "error starting Server: %s\noutput:\n%s", err, outputStr)
 }
 

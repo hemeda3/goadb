@@ -36,6 +36,8 @@ type ServerConfig struct {
 // Server knows how to start the adb Server and connect to it.
 type server interface {
 	Start() error
+	Root() error
+
 	Dial() (*wire.Conn, error)
 }
 
@@ -112,6 +114,14 @@ func (s *realServer) Start() error {
 	output, err := s.config.fs.CmdCombinedOutput(s.config.PathToAdb, "-L", fmt.Sprintf("tcp:%s", s.address), "start-Server")
 	outputStr := strings.TrimSpace(string(output))
 	return errors.WrapErrorf(err, errors.ServerNotAvailable, "error starting Server: %s\noutput:\n%s", err, outputStr)
+}
+
+// root ensures there is a Server running as root.
+func (s *realServer) Root() error {
+	output, err := s.config.fs.CmdCombinedOutput(s.config.PathToAdb, "root")
+	outputStr := strings.TrimSpace(string(output))
+	fmt.Println("rooting result ", string(output))
+	return errors.WrapErrorf(err, errors.ServerNotAvailable, "error rooting Server: %s\noutput:\n%s", err, outputStr)
 }
 
 // filesystem abstracts interactions with the local filesystem for testability.

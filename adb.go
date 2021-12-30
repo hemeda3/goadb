@@ -45,6 +45,11 @@ func (c *Adb) StartServer() error {
 	return c.server.Start()
 }
 
+// Starts the adb Server if it’s not running.
+func (c *Adb) RootServer() error {
+	return c.server.Root()
+}
+
 func (c *Adb) Device(descriptor DeviceDescriptor) *Device {
 	return &Device{
 		Server:         c.server,

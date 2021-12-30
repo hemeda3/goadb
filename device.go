@@ -146,6 +146,16 @@ func (c *Device) Remount() (string, error) {
 	return string(resp), wrapClientError(err, c, "Remount")
 }
 
+func (c *Device) Root() (string, error) {
+	conn, err := c.dialDevice()
+	if err != nil {
+		return "", wrapClientError(err, c, "root")
+	}
+	defer conn.Close()
+
+	resp, err := conn.RoundTripSingleResponse([]byte("root"))
+	return string(resp), wrapClientError(err, c, "root")
+}
 func (c *Device) ListDirEntries(path string) (*DirEntries, error) {
 	conn, err := c.getSyncConn()
 	if err != nil {
